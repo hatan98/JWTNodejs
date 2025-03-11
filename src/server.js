@@ -13,6 +13,7 @@ app.use(cors())
 //config req.body
 app.use(express.json()) // for json
 app.use(express.urlencoded({ extended: true })) // for form data
+app.use(express.static('public'))
 
 //config template engine
 configViewEngine(app);
@@ -20,7 +21,7 @@ configViewEngine(app);
 const webAPI = express.Router();
 webAPI.get("/", getHomepage)
 //khai báo route
-app.use('/v1/api/', apiRoutes);
+app.use('/v1/api', apiRoutes);
 app.use('/', webAPI);
 
 

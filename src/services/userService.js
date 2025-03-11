@@ -2,7 +2,9 @@ require("dotenv").config();
 const User = require("../models/user");
 const bcrypt = require('bcrypt')
 const saltRound = 10
+const fs = require('fs')
 const jwt = require('jsonwebtoken')
+const path = require('path');
 const createUserService = async (name, email, password) => {
     try {
         //check email tồn tại
@@ -48,8 +50,14 @@ const loginUserService = async (email, password) => {
                     email: user.email,
                     name: user.name
                 }
-                const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
-                    expiresIn: process.env.JWT_EXPIRE
+
+                const privateKeyPath = path.join(__dirname, '../certs/private.pem');
+                const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+
+                const access_token = jwt.sign(payload, privateKey, {
+                    expiresIn: process.env.JWT_EXPIRE,
+                    algorithm: 'RS256'
+
                 })
                 return {
                     EC: 0,

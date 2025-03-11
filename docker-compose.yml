@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .  # Build từ Dockerfile trong thư mục hiện tại
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env  # Load file .env vào container
+    volumes:
+      - .:/app  # Đồng bộ code giữa máy host & container
+      - /app/node_modules  # Tránh lỗi khi dùng volume
+    command: ["node", "src/server.js"]  # Chạy backend
